@@ -1,0 +1,60 @@
+.active-ticket{
+    border: 1px solid #f7941d;
+    border-radius: 6px;
+}
+.ticket{
+    padding: 10px;
+}
+
+.opened_ticket{
+    font-size: 30px !important; color:#50cd89
+}
+
+.closed_ticket{
+    font-size: 30px !important; color:#d9214e
+}
+
+.contact-message{
+    box-shadow: 3px -3px 70px inset #6f6c6c30;
+    z-index: 999999999;
+    display: block !important;
+    position: relative;
+    border-radius: 30px 0 30px 30px !important;
+    padding: 20px !important;
+    background-color: #c1f7ae9e !important;
+}
+
+.your-message{
+    box-shadow: 3px -3px 70px inset #6f6c6c30;
+    z-index: 999999999;
+    display: block !important;
+    position: relative;
+    border-radius: 0 30px 30px 30px !important;
+    padding: 20px !important;
+    background-color: rgba(174,211,247,0.62) !important;
+}
+.text-table {
+    color: #424242 !important
+}
+
+.tickmark {
+}
+
+.tickmark::after{
+    content: '✔';
+    color: #14bb14;
+}
+
+
+.my-badge {
+    position: absolute;
+    top: -5px; /* Adjust as needed to position the badge correctly */
+    right: -5px; /* Adjust as needed to position the badge correctly */
+    padding: 5px;
+    border-radius: 50%;
+    background-color: #88d2ff;
+    color: #e10f0f;
+    font-size: 0.8em;
+    font-weight: bold;
+    line-height: 1;
+}
