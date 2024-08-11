@@ -20,7 +20,7 @@ services:
       - php
   php:
     build: ./docker/php
-    image:accouint_php
+    image: accouint_php
     restart: always
     working_dir: /app
     volumes:
@@ -31,7 +31,7 @@ services:
     environment:
         - TZ:"Asia/Tehran"
   queue:
-      image:accouint_php
+      image: accouint_php
       container_name:accouint_queue
       restart: always
       command: php artisan queue:work --sleep=3 --tries=3
@@ -41,7 +41,7 @@ services:
           - php
           - ws
   ws:
-      image:accouint_php
+      image: accouint_php
       container_name:accouint_ws
       restart: always
       command: php artisan reverb:start
