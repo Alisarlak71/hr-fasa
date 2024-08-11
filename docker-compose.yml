@@ -32,28 +32,13 @@ services:
         - TZ:"Asia/Tehran"
   queue:
       image: accouint_php
-      container_name:accouint_queue
+      container_name: accouint_queue
       restart: always
       command: php artisan queue:work --sleep=3 --tries=3
       volumes:
           - ./:/app
       depends_on:
           - php
-          - ws
-  ws:
-      image: accouint_php
-      container_name:accouint_ws
-      restart: always
-      command: php artisan reverb:start
-      volumes:
-          - ./:/app
-      ports:
-          - 8080:8080
-      depends_on:
-        php:
-          condition: service_started
-        mysql:
-          condition: service_started
   mysql:
     image: ghcr.io/getimages/mysql:8.0.31-debian
     restart: always
