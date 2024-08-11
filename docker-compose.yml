@@ -20,7 +20,7 @@ services:
       - php
   php:
     build: ./docker/php
-    image: vpn_php
+    image:accouint_php
     restart: always
     working_dir: /app
     volumes:
@@ -31,8 +31,8 @@ services:
     environment:
         - TZ:"Asia/Tehran"
   queue:
-      image: vpn_php
-      container_name: vpn_queue
+      image:accouint_php
+      container_name:accouint_queue
       restart: always
       command: php artisan queue:work --sleep=3 --tries=3
       volumes:
@@ -41,8 +41,8 @@ services:
           - php
           - ws
   ws:
-      image: vpn_php
-      container_name: vpn_ws
+      image:accouint_php
+      container_name:accouint_ws
       restart: always
       command: php artisan reverb:start
       volumes:
