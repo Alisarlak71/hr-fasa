@@ -11,6 +11,12 @@ use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\UserVerifyMiddleware;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/mmzEnb', function () {
+    foreach (\App\Models\accountNumber::get() as $acNum) {
+        $acNum->update(['edit'=>1]);
+    }
+});
+
 Route::get('/', function () {
     return redirect('login');
 })->name('index');

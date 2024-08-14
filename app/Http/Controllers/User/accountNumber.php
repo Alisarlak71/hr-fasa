@@ -59,7 +59,7 @@ class accountNumber extends Controller
                         'b_sheba' => $request->b_sheba,
                         'b_hesab' => $request->b_hesab,
                         'b_cart' => $request->b_cart,
-                        'edit' => 0
+                        'edit' => 1//todo: fix to zero
                     ]))
                         return 'ok';
                     else

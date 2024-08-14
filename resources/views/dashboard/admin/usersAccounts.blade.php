@@ -138,11 +138,11 @@
                                         </div>
                                         <div class="d-flex">
                                             حساب:
-                                            <div class="copy">{{ $ac->h_sheba }}</div>
+                                            <div class="copy">{{ $ac->h_hesab }}</div>
                                         </div>
                                         <div class="d-flex">
                                             کارت:
-                                            <div class="copy">{{ $ac->h_sheba }}</div>
+                                            <div class="copy">{{ $ac->h_cart }}</div>
                                         </div>
                                     </td>
                                     <td class="text-table">
@@ -152,11 +152,11 @@
                                         </div>
                                         <div class="d-flex">
                                             حساب:
-                                            <div class="copy">{{ $ac->b_sheba }}</div>
+                                            <div class="copy">{{ $ac->b_hesab }}</div>
                                         </div>
                                         <div class="d-flex">
                                             کارت:
-                                            <div class="copy">{{ $ac->b_sheba }}</div>
+                                            <div class="copy">{{ $ac->b_cart }}</div>
                                         </div>
                                     </td>
                                     <td>
