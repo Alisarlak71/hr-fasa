@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/mmzEnb', function () {
     foreach (\App\Models\accountNumber::get() as $acNum) {
-        $acNum->update(['edit'=>1]);
+        $acNum->update(['edit' => 1]);
     }
 });
 
@@ -55,6 +55,21 @@ Route::middleware(AuthMiddleware::class)->group(function () {
 
     Route::get('storage/{filename}', function ($filename) {
         $path = storage_path('uploads/docs/' . auth()->id() . '/' . $filename);
+        if (!File::exists($path)) {
+            abort(404);
+        }
+        $file = File::get($path);
+        $type = File::mimeType($path);
+
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+        return $response;
+    });
+    Route::get('storage/{filename}/{uid}', function ($filename, $uid) {
+        if (auth()->user()->isAdmin())
+            $path = storage_path('uploads/docs/' . $uid . '/' . $filename);
+        else
+            abort(404);
         if (!File::exists($path)) {
             abort(404);
         }

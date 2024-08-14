@@ -138,7 +138,8 @@
                                                 @endphp
                                                 @if(sizeof($docs)>0)
                                                     @foreach($docs as $doc)
-                                                        <a href="{{ asset('storage/'.$doc->url) }}" target="_blank">
+                                                        <a href="{{ asset('storage/'.$doc->url.'/'.$doc->user_id) }}"
+                                                           target="_blank">
                                                             <img src="{{ asset('assets/media/icons/dwld.jpg') }}"
                                                                  width="40px" data-toggle="tooltip" data-placement="top"
                                                                  title="{{ $doc->url }}">
