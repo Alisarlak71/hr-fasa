@@ -96,7 +96,7 @@ class accountNumber extends Controller
 
     public function fileExport()
     {
-        return Excel::download(new UserAccExport(), 'حساب_بانکی.xlsx');
+        return Excel::download(new UserAccExport(), 'accountNumber.xls', \Maatwebsite\Excel\Excel::CSV);
     }
 
     public function changeDoEdit(Request $request)

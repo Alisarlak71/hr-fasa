@@ -36,6 +36,6 @@ class UserAccExport implements FromCollection, WithHeadings
             ->get();
         return $acountNumbers;
 
-        return accountNumber::with('getUser')->get();
+        //return accountNumber::with('getUser')->get();
     }
 }
