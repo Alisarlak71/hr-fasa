@@ -2,13 +2,16 @@
 
 namespace App\Exports;
 
-use App\Models\accountNumber;
-use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
-class UserAccExport implements FromCollection, WithHeadings, WithCustomCsvSettings
+class UserAccExport implements FromCollection, WithHeadings, WithCustomCsvSettings,WithColumnFormatting,WithCustomValueBinder
 {
     public function headings(): array
     {
@@ -29,10 +32,27 @@ class UserAccExport implements FromCollection, WithHeadings, WithCustomCsvSettin
     {
         return [
             'output_encoding' => 'UTF-8',
-            'Content-Encoding'=> 'UTF-8'
+            'Content-Encoding' => 'UTF-8'
         ];
     }
 
+    public function columnFormats(): array
+    {
+        return [
+            'G' => NumberFormat::FORMAT_TEXT,
+            'H' => NumberFormat::FORMAT_TEXT,
+            'I' => NumberFormat::FORMAT_TEXT,
+        ];
+    }
+    public function bindValue(Cell $cell, $value)
+    {
+        if (is_numeric($value)) {
+            $cell->setValueExplicit($value, DataType::TYPE_STRING);
+
+            return true;
+        }
+        return true;
+    }
     /**
      * @return array
      */
