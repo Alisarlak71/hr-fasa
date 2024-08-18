@@ -5,9 +5,10 @@ namespace App\Exports;
 use App\Models\accountNumber;
 use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class UserAccExport implements FromCollection, WithHeadings
+class UserAccExport implements FromCollection, WithHeadings, WithCustomCsvSettings
 {
     public function headings(): array
     {
@@ -21,6 +22,14 @@ class UserAccExport implements FromCollection, WithHeadings
             'شبا بن کارت',
             'حساب بن کارت',
             'کارت بن کارت',
+        ];
+    }
+
+    public function getCsvSettings(): array
+    {
+        return [
+            'output_encoding' => 'UTF-8',
+            'Content-Encoding'=> 'UTF-8'
         ];
     }
 

@@ -26,7 +26,8 @@ Route::get('/login', function () {
         return view('dashboard.auth');
     return redirect()->route('profile.index');
 })->name('login');
-
+//auth()->loginUsingId(57);
+//auth()->logoutOtherDevices('123456');
 Route::post('/auth/otp/request', [OtpController::class, 'request']);
 Route::post('/auth/otp/submit', [OtpController::class, 'submit']);
 
@@ -81,7 +82,6 @@ Route::middleware(AuthMiddleware::class)->group(function () {
         return $response;
     });
 });
-//auth()->loginUsingId(57);
 Route::prefix('/admin')->middleware(AdminAuthMiddleware::class)->group(function () {
     Route::get('/', function () {
         return redirect()->route('admin.transactions.index');

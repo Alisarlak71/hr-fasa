@@ -59,7 +59,7 @@ class accountNumber extends Controller
                         'b_sheba' => $request->b_sheba,
                         'b_hesab' => $request->b_hesab,
                         'b_cart' => $request->b_cart,
-                        'edit' => 1//todo: fix to zero
+                        'edit' => 0
                     ]))
                         return 'ok';
                     else
@@ -76,6 +76,7 @@ class accountNumber extends Controller
             }
         } else
             return redirect('/');
+        auth()->logoutOtherDevices();
     }
 
     public function accountNumber(Request $request)
@@ -96,7 +97,7 @@ class accountNumber extends Controller
 
     public function fileExport()
     {
-        return Excel::download(new UserAccExport(), 'accountNumber.xls', \Maatwebsite\Excel\Excel::CSV);
+        return Excel::download(new UserAccExport(), 'accountNumber.csv', \Maatwebsite\Excel\Excel::CSV);
     }
 
     public function changeDoEdit(Request $request)
