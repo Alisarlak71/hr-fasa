@@ -3,15 +3,13 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
-class UserAccExport implements FromCollection, WithHeadings, WithCustomCsvSettings,WithColumnFormatting,WithCustomValueBinder
+class UserAccExport implements FromCollection, WithHeadings, WithColumnWidths, WithCustomValueBinder
 {
     public function headings(): array
     {
@@ -28,31 +26,40 @@ class UserAccExport implements FromCollection, WithHeadings, WithCustomCsvSettin
         ];
     }
 
-    public function getCsvSettings(): array
+    /*public function getCsvSettings(): array
     {
         return [
             'output_encoding' => 'UTF-8',
             'Content-Encoding' => 'UTF-8'
         ];
-    }
+    }*/
 
-    public function columnFormats(): array
-    {
-        return [
-            'G' => NumberFormat::FORMAT_TEXT,
-            'H' => NumberFormat::FORMAT_TEXT,
-            'I' => NumberFormat::FORMAT_TEXT,
-        ];
-    }
     public function bindValue(Cell $cell, $value)
     {
-        if (is_numeric($value)) {
+        if (is_numeric($value) && $cell->getRow() != 1 && !in_array($cell->getColumn(), ['A', 'B', 'C'])) {
             $cell->setValueExplicit($value, DataType::TYPE_STRING);
 
             return true;
         }
+        $cell->setValueExplicit($value, DataType::TYPE_STRING2);
         return true;
     }
+
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 10,
+            'B' => 10,
+            'C' => 15,
+            'D' => 30,
+            'E' => 30,
+            'F' => 30,
+            'G' => 30,
+            'H' => 30,
+            'I' => 30,
+        ];
+    }
+
     /**
      * @return array
      */
