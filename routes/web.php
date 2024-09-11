@@ -15,9 +15,9 @@ Route::get('/mmzEnb', function () {
     /*foreach (\App\Models\accountNumber::get() as $acNum) {
         $acNum->update(['edit' => 1]);
     }*/
-    foreach (\App\Models\User::get() as $u) {
+    /*foreach (\App\Models\User::get() as $u) {
         $u->update(['password' => bcrypt('123456')]);
-    }
+    }*/
 });
 
 Route::get('/', function () {
