@@ -59,12 +59,12 @@
                         <div class="menu-item">
                             <!--begin:Menu link-->
                             <a class="menu-link " href="/account_number">
-												<span class="menu-icon">
-													<i class="ki-duotone ki-rocket fs-2">
-														<span class="path1"></span>
-														<span class="path2"></span>
-													</i>
-												</span>
+                                <span class="menu-icon">
+                                    <i class="ki-duotone ki-rocket fs-2">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
+                                </span>
                                 <span class="menu-title"> شماره حساب </span>
                             </a>
                             <!--end:Menu link-->
@@ -78,6 +78,17 @@
                                         </i>
                                     </span>
                                 <span class="menu-title"> مدارک </span>
+                            </a>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link " href="/user/food">
+                                    <span class="menu-icon">
+                                        <i class="ki-duotone ki-tablet fs-2">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
+                                    </span>
+                                <span class="menu-title"> اعلام حضور </span>
                             </a>
                         </div>
                     </div>

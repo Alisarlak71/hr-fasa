@@ -71,9 +71,8 @@ class OtpController
         $request->validate([
             'otp' => ['required', 'numeric'],
             'name' => [$require, 'string'],
-            'email' => [$require, 'string', 'email', 'unique:users,email']
+            'cellphone' => [$require, 'numeric', 'unique:users,cellphone']
         ]);
-
 
         if (!$otp->check($cellphone, $request->input('otp'))) {
             throw ValidationException::withMessages([

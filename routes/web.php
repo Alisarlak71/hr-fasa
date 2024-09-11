@@ -12,9 +12,12 @@ use App\Http\Middleware\UserVerifyMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/mmzEnb', function () {
-    foreach (\App\Models\accountNumber::get() as $acNum) {
+    /*foreach (\App\Models\accountNumber::get() as $acNum) {
         $acNum->update(['edit' => 1]);
-    }
+    }*/
+    /*foreach (\App\Models\User::get() as $u) {
+        $u->update(['password' => bcrypt('123456')]);
+    }*/
 });
 
 Route::get('/', function () {
@@ -28,11 +31,10 @@ Route::get('/login', function () {
 })->name('login');
 //auth()->loginUsingId(57);
 //auth()->logoutOtherDevices('123456');
-Route::post('/auth/otp/request', [OtpController::class, 'request']);
-Route::post('/auth/otp/submit', [OtpController::class, 'submit']);
-
+Route::prefix('/auth/')->middleware('throttle:8,1')->group(function () {
+    Route::post('login', [\App\Http\Controllers\Auth\AuthController::class, 'login']);
+});
 Route::middleware(AuthMiddleware::class)->group(function () {
-
     Route::prefix('/informations')->group(function () {
         Route::get('/', [UserInformationController::class, 'index'])->name('informations.index');
         Route::post('/verify/request', [UserInformationController::class, 'requestVerify'])->name('informations.request.store');
@@ -48,6 +50,9 @@ Route::middleware(AuthMiddleware::class)->group(function () {
     Route::get('/sign_ins', [ProfileController::class, 'signIns']);
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile', [ProfileController::class, 'update']);
+    Route::put('/profile/change-password', [ProfileController::class, 'changePassword']);
+    Route::get('user/food', [UserInformationController::class, 'food']);
+    Route::post('user/food', [UserInformationController::class, 'foodOk']);
     Route::post('/profile/change_photo', [ProfileController::class, 'changePhoto']);
     Route::put('/profile/submit', [ProfileController::class, 'confirmUpdate']);
 
@@ -93,7 +98,9 @@ Route::prefix('/admin')->middleware(AdminAuthMiddleware::class)->group(function 
         Route::get('/account_number', [\App\Http\Controllers\User\accountNumber::class, 'accountNumber']);
         Route::post('/account_number/doEdit', [\App\Http\Controllers\User\accountNumber::class, 'changeDoEdit']);
         Route::get('/documents', [\App\Http\Controllers\User\UserInformationController::class, 'adShow']);
+        Route::get('/food', [AdminUserController::class, 'foodPerson']);
         Route::get('account_number/export', [\App\Http\Controllers\User\accountNumber::class, 'fileExport']);
+        Route::get('foods/export', [\App\Http\Controllers\User\accountNumber::class, 'fileExport2']);
         Route::put('/{user}', [AdminUserController::class, 'update']);
         Route::get('/{user}/toggle_status', [AdminUserController::class, 'toggleStatus']);
         Route::delete('/{user}', [AdminUserController::class, 'destroy']);

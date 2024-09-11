@@ -127,6 +127,21 @@
                             <!--end:Menu link-->
                         </div>
                         <!--end:Menu item-->
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link " href="/admin/users/food">
+                                    <span class="menu-icon">
+                                        <i class="ki-duotone ki-user-tick fs-2">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
+                                    </span>
+                                <span class="menu-title"> حضور افراد </span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <!--end:Menu item-->
                     </div>
                     <!--end:Menu item-->
                 </div>

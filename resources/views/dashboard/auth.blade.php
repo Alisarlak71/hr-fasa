@@ -1,11 +1,5 @@
 @extends('dashboard._html')
 
-@section('head-links')
-    @parent
-    <script src="https://www.google.com/recaptcha/api.js?render=6LdhAgQqAAAAADNEV3QhCbeoJA7Ml2y8SK58bMDP"></script>
-
-@endsection
-
 @section('content')
     <div class="d-flex flex-column flex-root" id="kt_app_root">
         <!--begin::Page bg image-->
@@ -15,7 +9,8 @@
 
             [data-bs-theme="dark"] body {
                 background-image: url('{{asset('assets/media/auth/bg4-dark.jpg')}}');
-            }</style>
+            }
+        </style>
         <!--end::Page bg image-->
         <!--begin::Authentication - ورود -->
         <div class="d-flex flex-column flex-column-fluid flex-lg-row">
@@ -36,8 +31,7 @@
             </div>
             <!--begin::Aside-->
             <!--begin::Body-->
-            <div
-                    class="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12 p-lg-20">
+            <div class="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12 p-lg-20">
                 <!--begin::Card-->
                 <div class="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-600px p-20">
                     <!--begin::Wrapper-->
@@ -55,51 +49,27 @@
                             <!--begin::Input group=-->
                             <div class="fv-row mb-8">
                                 <!--begin::Email-->
-                                <input id="cellphone" type="text" placeholder="شماره تلفن (09123332211)"
+                                <input id="cellphone" type="text" placeholder="شماره موبایل"
                                        name="cellphone" autocomplete="off" class="form-control bg-transparent"/>
                                 <!--end::Email-->
                             </div>
+                            <div class="fv-row mb-8">
+                                <!--begin::Password-->
+                                <input id="password" type="password" placeholder="کلمه عبور"
+                                       name="password" autocomplete="off" class="form-control bg-transparent"/>
+                                <!--end::Password-->
+                            </div>
                             <!--end::Input group=-->
-                            <div class="fv-row mb-3">
-                                <input style="display: none;" type="number" maxlength="6" id="otp_code"
-                                       placeholder="کد تایید ارسال شده"
-                                       name="code" autocomplete="off" class="form-control bg-transparent"/>
-                            </div>
-                            <div class="fv-row mb-3">
-                                <input style="display: none;" type="text" id="name"
-                                       placeholder="نام"
-                                       name="name" autocomplete="off" class="form-control bg-transparent"/>
-                            </div>
-                            {{--<div class="fv-row mb-3">
-                                <input style="display: none;" type="email" id="email"
-                                       placeholder="ایمیل"
-                                       name="email" autocomplete="off" class="form-control bg-transparent"/>
-                            </div>--}}
-                            <div style="justify-content: space-between"
-                                 class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
-                                <p style="display: none;" id="timer_text" class="text-info"></p>
-                                <a style="display: none;" id="edit_number" href="#">ویرایش شماره</a>
-                            </div>
-                            {!!  GoogleReCaptchaV3::renderField('otp_form_id','otp_action') !!}
+                            {{--{!!  GoogleReCaptchaV3::renderField('otp_form_id','otp_action') !!}--}}
                             <!--end::Wrapper-->
                             <!--begin::ارسال button-->
                             <div class="d-grid mb-10">
                                 <button type="submit" id="kt_sign_in_request" class="btn btn-primary">
                                     <!--begin::Indicator label-->
-                                    <span class="indicator-label">ارسال کد</span>
+                                    <span class="indicator-label">ورود </span>
                                     <!--end::Indicator label-->
                                     <!--begin::Indicator progress-->
-                                    <span class="indicator-progress">در حال ارسال ...
-										<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                    <!--end::Indicator progress-->
-                                </button>
-                                <button style="display: none" type="submit" id="kt_sign_in_submit"
-                                        class="btn btn-primary">
-                                    <!--begin::Indicator label-->
-                                    <span class="indicator-label">ورود</span>
-                                    <!--end::Indicator label-->
-                                    <!--begin::Indicator progress-->
-                                    <span class="indicator-progress">در حال ارسال ...
+                                    <span class="indicator-progress">در حال بررسی ...
 										<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                                     <!--end::Indicator progress-->
                                 </button>
@@ -132,56 +102,7 @@
 @section('scripts')
     @parent
     <script>
-        let files_list = []
         $(document).ready(function () {
-
-            function timer(expire_time) {
-                const interval = setInterval(function () {
-                    if (expire_time <= 0) {
-                        $('#timer_text').html('00:00');
-                        clearInterval(interval);
-                        $('#cellphone').css('display', 'block');
-                        $('#otp_code').css('display', 'none');
-                        $('#email').css('display', 'none');
-                        $('#name').css('display', 'none');
-                        $('#timer_text').css('display', 'none');
-                        $('#edit_number').css('display', 'none');
-                        $('#kt_sign_in_request').css('display', 'block');
-                        $('#kt_sign_in_submit').css('display', 'none');
-                        $("#request_errors").html('');
-
-                        return;
-                    }
-
-                    const minutes = Math.floor(expire_time / 60);
-                    const seconds = expire_time % 60;
-
-                    function str_pad_left(string, pad, length) {
-                        return (new Array(length + 1).join(pad) + string).slice(-length);
-                    }
-
-                    const finalTime = str_pad_left(minutes, '0', 2) + ':' + str_pad_left(seconds, '0', 2);
-                    $('#timer_text').html(finalTime);
-
-                    expire_time--;
-                }, 1000);
-            }
-
-
-            $("#edit_number").click(function (e) {
-                e.preventDefault();
-                $('#cellphone').css('display', 'block');
-                $('#otp_code').css('display', 'none');
-                $('#email').css('display', 'none');
-                $('#name').css('display', 'none');
-                $('#timer_text').css('display', 'none');
-                $('#edit_number').css('display', 'none');
-                $('#kt_sign_in_request').css('display', 'block');
-                $('#kt_sign_in_submit').css('display', 'none');
-                $("#request_errors").html('');
-
-            });
-
             $("#kt_sign_in_request").click(function (e) {
                 e.preventDefault();
                 showProgressButton($(this));
@@ -191,133 +112,45 @@
                     $("#request_errors").html('');
                     const data = {
                         cellphone: $('#cellphone').val(),
+                        password: $('#password').val(),
                         _token: `{{ csrf_token() }}`,
-                        'g-recaptcha-response': getReCaptchaV3Response('otp_form_id')
+                        // 'g-recaptcha-response': getReCaptchaV3Response('otp_form_id')
                     }
 
                     $.ajax({
-                        url: '/auth/otp/request',
+                        url: '/auth/login',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify(data),
                         success: function (response) {
                             hideProgressButton(this_button);
-                            refreshReCaptchaV3('otp_form_id', 'otp_action');
-
-                            $('#cellphone').css('display', 'none');
-                            $('#otp_code').css('display', 'block');
-
-                            if (response.is_new) {
-                                $('#name').css('display', 'block');
-                                $('#email').css('display', 'block');
-                            }
-
-                            $('#timer_text').css('display', 'block');
-                            $('#edit_number').css('display', 'block');
-                            $('#kt_sign_in_request').css('display', 'none');
-                            $('#kt_sign_in_submit').css('display', 'block');
+                            //refreshReCaptchaV3('otp_form_id', 'otp_action');
                             $("#request_errors").html('');
-
-                            timer(response.expires_after);
+                            window.location = '/user/food';
                         },
                         error: function (xhr) {
                             hideProgressButton(this_button);
-                            refreshReCaptchaV3('otp_form_id', 'otp_action');
+                           // refreshReCaptchaV3('otp_form_id', 'otp_action');
 
                             $("#request_errors").html(xhr.responseJSON.message);
                             if (xhr.responseJSON.errors) {
-                                $("#request_errors").html(xhr.responseJSON.errors.cellphone[0]);
+                                $("#request_errors").html(xhr.responseJSON.errors.email[0] || xhr.responseJSON.errors.password[0]);
                             }
                         }
                     });
                 } else {
-                    $("#request_errors").html('شماره تلفن را وارد کنید!');
+                    $("#request_errors").html('نام کاربری و رمز عبور را وارد کنید!');
                 }
             });
 
-            $('#cellphone').keypress(function (e) {
+            $('#password').keypress(function (e) {
                 let key = e.which;
-                if (key === 13)  // the enter key code
+                if (key == 13)  // the enter key code
                 {
                     $('#kt_sign_in_request').click();
                     return false;
                 }
             });
-
-            $('#otp_code').keypress(function (e) {
-                let key = e.which;
-                if (key === 13)  // the enter key code
-                {
-                    $('#kt_sign_in_submit').click();
-                    return false;
-                }
-            });
-
-            $('#name').keypress(function (e) {
-                let key = e.which;
-                if (key === 13)  // the enter key code
-                {
-                    $('#kt_sign_in_submit').click();
-                    return false;
-                }
-            });
-
-            $('#email').keypress(function (e) {
-                let key = e.which;
-                if (key === 13)  // the enter key code
-                {
-                    $('#kt_sign_in_submit').click();
-                    return false;
-                }
-            });
-
-            $("#kt_sign_in_submit").click(function (e) {
-                e.preventDefault();
-                showProgressButton($(this));
-                const this_button = $(this);
-                if ($("#cellphone").val() !== '' || $("otp_code").val() !== '') {
-                    $("#request_errors").html('');
-                    const data = {
-                        cellphone: $('#cellphone').val(),
-                        otp: $("#otp_code").val(),
-                        name: $("#name").val(),
-                        email: $("#email").val(),
-                        _token: `{{ csrf_token() }}`,
-                        'g-recaptcha-response': getReCaptchaV3Response('otp_form_id')
-                    }
-
-                    $.ajax({
-                        url: '/auth/otp/submit',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify(data),
-                        success: function (response) {
-                            hideProgressButton(this_button);
-                            refreshReCaptchaV3('otp_form_id', 'otp_action');
-
-                            // if(response.user?.is_admin){
-                            //     window.location= '/admin/transactions';
-                            // }else {
-                            window.location = '/account_number';
-                            // }
-                        },
-                        error: function (xhr) {
-                            hideProgressButton(this_button);
-                            refreshReCaptchaV3('otp_form_id', 'otp_action');
-                            $("#request_errors").html(xhr.responseJSON.message);
-                            if (xhr.responseJSON.errors) {
-                                $("#request_errors").html(xhr.responseJSON.errors?.otp[0] || xhr.responseJSON.errors?.name[0] || xhr.responseJSON.errors?.email[0]);
-                            }
-                        }
-                    });
-                } else {
-                    $("#request_errors").html('شماره تلفن را وارد کنید!');
-                }
-            });
         });
     </script>
-    {!!  GoogleReCaptchaV3::init() !!}
-
 @endsection
-
-

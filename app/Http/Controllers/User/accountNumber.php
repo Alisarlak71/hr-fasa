@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Exports\UserAccExport;
+use App\Exports\UserFoodExport;
 use App\Http\Controllers\Controller;
 use App\Models\accountNumber as accountModel;
 use Illuminate\Http\Request;
@@ -98,6 +99,10 @@ class accountNumber extends Controller
     public function fileExport()
     {
         return Excel::download(new UserAccExport(), 'accountNumber.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+    public function fileExport2()
+    {
+        return Excel::download(new UserFoodExport(), 'lists.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
     public function changeDoEdit(Request $request)

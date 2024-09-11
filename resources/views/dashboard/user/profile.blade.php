@@ -303,6 +303,91 @@
             </div>
         </div>
         <!--end::Content container-->
+        <div class="app-container container-fluid">
+            <div class="card mb-5 mb-xl-10" id="user_password_section">
+                <!--begin::کارت header-->
+                <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse"
+                     data-bs-target="#kt_account_profile_details" aria-expanded="true"
+                     aria-controls="kt_account_profile_details">
+                    <!--begin::کارت title-->
+                    <div class="card-title m-0">
+                        <h3 class="fw-bold m-0"> تغییر کلمه عبور </h3>
+                    </div>
+                    <!--end::کارت title-->
+                </div>
+                <!--begin::کارت header-->
+                <!--begin::Content-->
+                <div id="kt_account_settings_profile_details" class="collapse show">
+                    <!--begin::Form-->
+                    <form id="kt_account_profile_password_form" class="form">
+                        <!--begin::کارت body-->
+                        <div class="card-body border-top p-9">
+                            <div class="row col-8 gx-10 mb-5">
+                                <div class="col-lg-6 mt-7">
+                                    <!--begin::Tags-->
+                                    <label class="fs-6 fw-semibold form-label mb-2">کلمه عبور فعلی</label>
+                                    <!--end::Tags-->
+                                    <!--begin::Input wrapper-->
+                                    <div class="position-relative">
+                                        <!--begin::Input-->
+                                        <input autocomplete="off" type="password"
+                                               class="form-control form-control-solid"
+                                               placeholder="کلمه عبور فعلی" name="userCurrentPassword"/>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input wrapper-->
+                                </div>
+                            </div>
+                            <div class="row col-8 gx-10 mb-5">
+                                <div class="col-lg-6 mt-7">
+                                    <!--begin::Tags-->
+                                    <label class="fs-6 fw-semibold form-label mb-2">کلمه عبور جدید</label>
+                                    <!--end::Tags-->
+                                    <!--begin::Input wrapper-->
+                                    <div class="position-relative">
+                                        <!--begin::Input-->
+                                        <input autocomplete="off" type="password"
+                                               class="form-control form-control-solid"
+                                               placeholder="کلمه عبور " name="userPassword"/>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input wrapper-->
+                                </div>
+                            </div>
+                            <div class="row col-8 gx-10 mb-5">
+                                <div class="col-lg-6 mt-7">
+                                    <!--begin::Tags-->
+                                    <label class="fs-6 fw-semibold form-label mb-2">تکرار کلمه عبور</label>
+                                    <!--end::Tags-->
+                                    <!--begin::Input wrapper-->
+                                    <div class="position-relative">
+                                        <!--begin::Input-->
+                                        <input autocomplete="off" type="password"
+                                               class="form-control form-control-solid"
+                                               placeholder="کلمه عبور " name="userPasswordConfirm"/>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input wrapper-->
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::کارت body-->
+                        <!--begin::Actions-->
+                        <div class="card-footer d-flex justify-content-end py-6 px-9">
+                            <button id="submitUpdatePasswordUser" type="button" class="btn btn-lg btn-primary"
+                                    data-kt-element="details-next">
+                                <span class="indicator-label">ثبت رمز عبور دید</span>
+                                <span class="indicator-progress">لطفا صبر کنید...
+												<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                            </button>
+                        </div>
+                        <!--end::Actions-->
+                    </form>
+                    <!--end::Form-->
+                </div>
+                <!--end::Content-->
+            </div>
+        </div>
     </div>
     <!--end::Content-->
     <!--begin::Modal body-->
@@ -555,6 +640,71 @@
                     }
                 });
             });
-        </script>
 
+            $("#submitUpdatePasswordUser").on('click', function () {
+                let submitUpdateUserElement = $(this);
+                showProgressButton($(submitUpdateUserElement));
+                let password = $('input[name="userPassword"]');
+                let confirm_password = $('input[name="userPasswordConfirm"]');
+                let current_password = $('input[name="userCurrentPassword"]');
+                if (password.val() !== "" && confirm_password.val() !== "" && current_password.val() !== ""
+                ) {
+                    $.ajax({
+                        url: '/profile/change-password',
+                        type: 'PUT',
+                        dataType: 'JSON',
+                        data: {
+                            "_token": "{{csrf_token()}}",
+                            "password": password.val(),
+                            "current_password": current_password.val(),
+                            "password_confirmation": confirm_password.val()
+                        },
+                        success: function (response) {
+                            Swal.fire(
+                                {
+                                    type: 'success',
+                                    text: 'درخواست با موفقیت ثبت شد',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000)
+
+                            hideProgressButton(submitUpdateUserElement);
+                        },
+                        error: function (xhr, status, error) {
+                            hideProgressButton(submitUpdateUserElement);
+                            if (xhr.status === 422) {
+                                Swal.fire(
+                                    {
+                                        title: 'خطا',
+                                        type: 'error',
+                                        text: xhr.responseJSON.errors.password || xhr.responseJSON.errors.current_password,
+                                        confirmButtonText: 'باشه'
+                                    });
+                            } else {
+                                Swal.fire(
+                                    {
+                                        title: 'رمز عبور فعلی نادرست است',
+                                        type: 'error',
+                                        text: xhr.responseJSON.error || 'خطای اطلاعات ',
+                                        confirmButtonText: 'باشه'
+                                    });
+                            }
+                        }
+                    });
+
+                } else {
+                    Swal.fire(
+                        {
+                            title: 'خطا',
+                            type: 'error',
+                            text: 'رمز عبور فعلی و جدید را پر کنید',
+                            confirmButtonText: 'باشه'
+                        });
+                    hideProgressButton(submitUpdateUserElement);
+                }
+            });
+        </script>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\UserStatuses;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\food;
 use App\Models\User;
 use App\Rules\Cellphone;
 use Illuminate\Contracts\Foundation\Application;
@@ -97,5 +98,19 @@ class UserController extends Controller
         $user->delete();
 
         return new JsonResponse(['message' => 'user deleted!']);
+    }
+
+    public function foodPerson(Request $request)
+    {
+        $fil['filter'] = $request->filter;
+        $fil['lname'] = $request->lname;
+        $uid = auth()->user()
+            ->where('code', 'like', '%' . $fil['filter'] . '%')
+            ->where('lname', 'like', '%' . $fil['lname'] . '%')
+            ->pluck('id', 'id');
+        $accounts = food::whereIn('user_id', $uid)->paginate(10);
+
+        return view('dashboard.admin.foodUsers')->with(['title' => 'حساب‌های بانکی',
+            'userActs' => $accounts]);
     }
 }

@@ -11,8 +11,10 @@ use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Client\HttpClientException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Hash;
 use Illuminate\Validation\ValidationException;
 
 class ProfileController
@@ -71,7 +73,7 @@ class ProfileController
         $request->validate([
             'name' => 'nullable',
             'cellphone' => ['required', 'string', 'max:20'],
-            'otp' => ['required','numeric' ],
+            'otp' => ['required', 'numeric'],
         ]);
 
         $cellphone = $request->input('cellphone');
@@ -96,7 +98,7 @@ class ProfileController
      */
     public function signIns(): View|\Illuminate\Foundation\Application|Factory|Application
     {
-        return view('dashboard.user.sign_ins')->with(['title'=>'ورود ها','sign_ins'=>SignIn::whereUserId(Auth::id())->orderByDesc('id')->paginate(10)]);
+        return view('dashboard.user.sign_ins')->with(['title' => 'ورود ها', 'sign_ins' => SignIn::whereUserId(Auth::id())->orderByDesc('id')->paginate(10)]);
     }
 
     /**
@@ -111,7 +113,25 @@ class ProfileController
         ]);
         $file = $request->file('file');
         $files = $fm->upload([$file], 'users');
-        $fm->attachFile('users',Auth()->id(),$files);
-        return new JsonResponse(['messages'=>'files uploaded!']);
+        $fm->attachFile('users', Auth()->id(), $files);
+        return new JsonResponse(['messages' => 'files uploaded!']);
+    }
+
+    public function changePassword(Request $request): JsonResponse
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|confirmed'
+        ]);
+        $user = Auth::user();
+        $current_password = $request->input('current_password');
+        $password = $request->input('password');
+
+        if (Hash::check($current_password, $user->password)) {
+            $user->password = Hash::make($password);
+            $user->save();
+            return new JsonResponse(['message' => 'success']);
+        } else
+            throw new HttpClientException('کلمه عبور فعلی اشتیاه است!', '401');
     }
 }

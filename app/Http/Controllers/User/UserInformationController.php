@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Enums\docTypes;
 use App\Http\Controllers\Controller;
 use App\Models\documents;
+use App\Models\food;
 use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -88,7 +89,7 @@ class UserInformationController extends Controller
         ////dd($filters);
 
         $uid = documents::groupBy('user_id')->pluck('user_id');
-        $accounts = auth()->user()->with('getDocs')->whereIn('id',$uid)
+        $accounts = auth()->user()->with('getDocs')->whereIn('id', $uid)
             ->where('code', 'like', '%' . $fil['filter'] . '%')
             ->where('lname', 'like', '%' . $fil['lname'] . '%')
             ->paginate(10);
@@ -96,5 +97,21 @@ class UserInformationController extends Controller
         //$accounts = documents::paginate(10);
         return view('dashboard.admin.usersDocs')->with(['title' => 'مدارک کاربران',
             'userActs' => $accounts]);
+    }
+
+    public function food()
+    {
+        return view('dashboard.user.food')->with(['title' => 'اعلام حضور']);
+    }
+
+    public function foodOk(Request $request)
+    {
+        if ($request->ajax() && auth()->id()) {
+            food::create([
+                'user_id' => auth()->id(),
+            ]);
+            return 'ok';
+        }
+        return 'no';
     }
 }
