@@ -108,7 +108,7 @@ class UserController extends Controller
             ->where('code', 'like', '%' . $fil['filter'] . '%')
             ->where('lname', 'like', '%' . $fil['lname'] . '%')
             ->pluck('id', 'id');
-        $accounts = food::whereIn('user_id', $uid)->paginate(10);
+        $accounts = food::whereIn('user_id', $uid)->whereDate('created_at', \Illuminate\Support\Carbon::today())->paginate(10);
 
         return view('dashboard.admin.foodUsers')->with(['title' => 'حساب‌های بانکی',
             'userActs' => $accounts]);
