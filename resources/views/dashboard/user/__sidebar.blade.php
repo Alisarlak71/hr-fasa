@@ -80,17 +80,19 @@
                                 <span class="menu-title"> مدارک </span>
                             </a>
                         </div>
-                        <div class="menu-item">
-                            <a class="menu-link " href="/user/food">
+                        @if(auth()->user()->place == 'دفتر مرکزی')
+                            <div class="menu-item">
+                                <a class="menu-link " href="/user/food">
                                     <span class="menu-icon">
                                         <i class="ki-duotone ki-tablet fs-2">
                                             <span class="path1"></span>
                                             <span class="path2"></span>
                                         </i>
                                     </span>
-                                <span class="menu-title"> اعلام حضور </span>
-                            </a>
-                        </div>
+                                    <span class="menu-title"> اعلام حضور </span>
+                                </a>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <!--end::Menu-->

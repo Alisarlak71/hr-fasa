@@ -101,7 +101,9 @@ class UserInformationController extends Controller
 
     public function food()
     {
-        return view('dashboard.user.food')->with(['title' => 'اعلام حضور']);
+        if (auth()->user()->place == 'دفتر مرکزی')
+            return view('dashboard.user.food')->with(['title' => 'اعلام حضور']);
+        return redirect('/');
     }
 
     public function foodOk(Request $request)
