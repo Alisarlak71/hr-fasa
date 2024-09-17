@@ -58,3 +58,13 @@ services:
       #- ./docker/redis/data:/data
     ports:
       - 127.0.0.1:${REDIS_EXPOSED_PORT:-0}:6379
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8581:80'
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: password
