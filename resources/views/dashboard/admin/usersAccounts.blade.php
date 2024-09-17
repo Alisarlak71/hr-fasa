@@ -716,7 +716,7 @@
                 type: 'POST',
                 data: 'a=' + a + '&u=' + u,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                    if (data==1){
                        Swal.fire({
                            type: 'success',

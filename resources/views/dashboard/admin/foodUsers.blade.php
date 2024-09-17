@@ -56,6 +56,21 @@
     <!--end::Toolbar-->
     <!--begin::Content-->
     <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <div class="col-xl-10">
+                <div class="card mb-5 mb-xl-8">
+                    <div class="d-flex p-3 align-items-center">
+                        <div class="me-2" style="width: 100px">حداکثر ساعت مجاز</div>
+                        <select class="form-control" style="max-width: 100px">
+                            <option value="8"{{ $st->value==8?' selected':'' }}>8:00</option>
+                            <option value="9"{{ $st->value==9?' selected':'' }}>9:00</option>
+                            <option value="10"{{ $st->value==10?' selected':'' }}>10:00</option>
+                            <option value="11"{{ $st->value==11?' selected':'' }}>11:00</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!--begin::Content container-->
         <div id="kt_app_content_container" class="app-container container-fluid">
             <div class="col-xl-10">
@@ -73,11 +88,11 @@
                     <th class="p-0 min-w-70px">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center gap-3 ms-5 flex-wrap">
-                                <form action="/admin/users/account_number" method="get">
+                                <form action="/admin/users/food" method="get">
                                     <input name="filter" value="{{$_GET['filter']??''}}" class="form-control"
                                            placeholder="کد پرسنلی">
                                 </form>
-                                <form action="/admin/users/account_number" method="get">
+                                <form action="/admin/users/food" method="get">
                                     <input name="lname" value="{{$_GET['lname']??''}}" class="form-control"
                                            placeholder="نام خانوادگی">
                                 </form>
@@ -661,7 +676,7 @@
                 type: 'POST',
                 data: 'a=' + a + '&u=' + u,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (data == 1) {
                         Swal.fire({
                             type: 'success',

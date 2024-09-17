@@ -141,7 +141,12 @@
                                                 </a>
                                                 <a href="#" data-bs-toggle="tooltip" title="ویرایش کاربر"
                                                    class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 edit_user"
-                                                   data-id="{{$user->id}}" data-name="{{$user->name}}" data-lname="{{$user->lname}}"
+                                                   data-id="{{$user->id}}" data-name="{{$user->name}}"
+                                                   data-lname="{{$user->lname}}" data-role="{{ $user->is_admin }}"
+                                                   data-peruser="{{$user->canDoit('userList',$user->id)}}"
+                                                   data-permaccount="{{$user->canDoit('userAccount',$user->id)}}"
+                                                   data-permdocs="{{$user->canDoit('userDocs',$user->id)}}"
+                                                   data-permpresent="{{$user->canDoit('userPresent',$user->id)}}"
                                                    data-cellphone="{{$user->cellphone}}">
                                                     <i class="ki-duotone ki-pencil fs-2">
                                                         <span class="path1"></span>
@@ -231,7 +236,7 @@
                             </div>
                             <div>
                                 <!--begin::Tags-->
-                                <label class="fs-6 fw-semibold form-label mb-2">نام </label>
+                                <label class="fs-6 fw-semibold form-label mb-2">نام خانوادگی</label>
                                 <!--end::Tags-->
                                 <!--begin::Input wrapper-->
                                 <div class="position-relative">
@@ -283,14 +288,32 @@
                             <div class="position-relative">
                                 <!--begin::Input-->
                                 <div class="col-lg-12 fv-row">
-                                    <select id="userRole" name="country" aria-label="" data-control="select2"
-                                            data-placeholder="انتخاب نقش"
+                                    <select id="userRole" data-control="select2" data-placeholder="انتخاب نقش"
                                             class="form-select form-select-solid form-select-lg fw-semibold">
                                         <option value="0">کاربر</option>
                                         <option value="1">مدیر</option>
                                     </select>
                                 </div>
                                 <!--end::Input-->
+                            </div>
+                            <div class="form-control mt-3">
+                                <legend>تخصیص دستررسی</legend>
+                                <div>
+                                    <input type="checkbox" id="perUser" value="userList">
+                                    <label for="perUser">لیست کاربر</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" id="permAccount" value="userAccount">
+                                    <label for="permAccount">لیست حساب</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" id="permDocs" value="userDocs">
+                                    <label for="permDocs">لیست مدارک</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" id="permPresent" value="userPresent">
+                                    <label for="permPresent">لیست حضور</label>
+                                </div>
                             </div>
                             <!--end::Input wrapper-->
                         </div>
@@ -480,6 +503,14 @@
                 let lname = $(this).data('lname');
                 let cellphone = $(this).data('cellphone');
 
+                let is_admin = $(this).data('role');
+
+                $(".updateUserModal #userRole").val(is_admin).change();
+                $(".updateUserModal #perUser").attr('checked', $(this).data('peruser'));
+                $(".updateUserModal #permAccount").attr('checked', $(this).data('permaccount'));
+                $(".updateUserModal #permDocs").attr('checked', $(this).data('permdocs'));
+                $(".updateUserModal #permPresent").attr('checked', $(this).data('permpresent'));
+
                 $('#updateUserModal').modal('show');
                 $(".updateUserModal #updateUserButton").attr('data-id', id);
                 $(".updateUserModal #userName").val(name);
@@ -495,6 +526,10 @@
                 let lname = $("#userlName");
                 let cellphone = $("#userCellphone");
                 let role = $("#userRole");
+                let permUser = $("#perUser");
+                let permAccount = $("#permAccount");
+                let permDocs = $("#permDocs");
+                let permPresent = $("#permPresent");
 
                 showProgressButton(thisElement);
                 $.ajax({
@@ -506,43 +541,43 @@
                         },
                         data: {
                             "name": name.val(),
-                            "lname": name.val(),
+                            "lname": lname.val(),
                             "cellphone": cellphone.val(),
-                            "is_admin": role.val()
+                            "is_admin": role.val(),
+                            "permUser": permUser.is(":checked") ? permUser.val() : '',
+                            "permAccount": permAccount.is(":checked") ? permAccount.val() : '',
+                            "permDocs": permDocs.is(":checked") ? permDocs.val() : '',
+                            "permPresent": permPresent.is(":checked") ? permPresent.val() : ''
                         },
                         success: function (response) {
-                            Swal.fire(
-                                {
-                                    type: 'success',
-                                    text: 'کاربر با موفقیت تغییر کرد!',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                });
+                            Swal.fire({
+                                type: 'success',
+                                text: 'تغییرات با موفقیت ثبت شد',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
                             hideProgressButton();
-
                             setTimeout(() => {
                                 window.location.reload();
                             }, 2000)
                         },
                         error: function (xhr, status, error) {
                             if (xhr.status === 422) {
-                                Swal.fire(
-                                    {
-                                        title: 'خطا',
-                                        type: 'error',
-                                        text: xhr.responseJSON.errors.name || xhr.responseJSON.errors.lname || xhr.responseJSON.errors.cellphone ||
-                                            xhr.responseJSON.errors.is_admin,
+                                Swal.fire({
+                                    title: 'خطا',
+                                    type: 'error',
+                                    text: xhr.responseJSON.errors.name || xhr.responseJSON.errors.lname || xhr.responseJSON.errors.cellphone ||
+                                        xhr.responseJSON.errors.is_admin,
 
-                                        confirmButtonText: 'باشه'
-                                    });
+                                    confirmButtonText: 'باشه'
+                                });
                             } else {
-                                Swal.fire(
-                                    {
-                                        title: 'خطا',
-                                        type: 'error',
-                                        text: xhr.responseJSON.error || 'خطای سرور ',
-                                        confirmButtonText: 'باشه'
-                                    });
+                                Swal.fire({
+                                    title: 'خطا',
+                                    type: 'error',
+                                    text: xhr.responseJSON.error || 'خطای سرور ',
+                                    confirmButtonText: 'باشه'
+                                });
                             }
                             hideProgressButton(thisElement);
                         }
@@ -594,7 +629,7 @@
                                         title: 'خطا',
                                         type: 'error',
                                         text: xhr.responseJSON.errors.name || xhr.responseJSON.errors.lname || xhr.responseJSON.errors.cellphone ||
-                                             xhr.responseJSON.errors.is_admin,
+                                            xhr.responseJSON.errors.is_admin,
 
                                         confirmButtonText: 'باشه'
                                     });

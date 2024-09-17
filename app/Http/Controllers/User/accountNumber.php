@@ -17,12 +17,15 @@ class accountNumber extends Controller
 
     public function index()
     {
+        if (auth()->user()->canDo('userAccount')) {
         $this->old = accountModel::where('user_id', auth()->id())->first();
         if ($this->old)
             $this->canAdd = 0;
 
         return view('dashboard.user.acount_number')
             ->with(['title' => 'حساب بانکی', 'user' => auth()->user()->load('photo'), 'canAdd' => $this->canAdd, 'old' => $this->old]);
+        }
+        return redirect('/');
     }
 
     public function add_account(Request $request)
@@ -83,6 +86,7 @@ class accountNumber extends Controller
     public function accountNumber(Request $request)
     {
         //dd($request->all());
+        if (auth()->user()->canDo('userAccount')) {
         $fil['filter'] = $request->filter;
         $fil['lname'] = $request->lname;
         //dd($filters);
@@ -94,6 +98,8 @@ class accountNumber extends Controller
 
         return view('dashboard.admin.usersAccounts')->with(['title' => 'حساب‌های بانکی',
             'userActs' => $accounts]);
+        }
+        return redirect('/');
     }
 
     public function fileExport()

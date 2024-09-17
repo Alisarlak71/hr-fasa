@@ -141,40 +141,70 @@
     <div id="kt_app_content" class="app-content flex-column-fluid container">
         <!--begin::Content container-->
         <div class="card animate__animated " id="verification_landing_card">
-            <!--begin::کارت body-->
+            @php
+                $time = \DB::table('setting')->where('text','maxTime')->first()->value??9;
+            @endphp
+                    <!--begin::کارت body-->
             <div class="card-body p-0">
                 <!--begin::Wrapper-->
                 <div class="card-px text-center py-5 my-5">
                     <!--begin::Title-->
                     <h2 class="fs-2x fw-bold mb-10">وضعیت حضور</h2>
                     <div>{{ \Morilog\Jalali\CalendarUtils::strftime('%A d/F/Y',time()) }}</div>
+                    <div class="text-danger">مهلت اعلام حضور تا ساعت {{ $time }} می‌باشد.</div>
                 </div>
                 <!--end::Wrapper-->
             </div>
-            @if(\App\Models\food::where('user_id',auth()->id())->whereDate('created_at', \Illuminate\Support\Carbon::today())->first())
-                <div class="d-block text-center fs-3" style="color: #00b300">وضعیت شما ثبت شده است</div>
-            @else
-                <div style="height: 300px">
-                    <div class="mmz wrap">
-                        <button class="button text-white" onclick="accept()">امروز حضور دارم</button>
+            @if($time > date('G'))
+                @php
+                    $check = \App\Models\food::where('user_id', auth()->id())->whereDate('created_at', '=', date('Y-m-d'))->get();
+                @endphp
+                @if($check && sizeof($check)>2)
+                    <div class="d-block text-center fs-3 mb-3" style="color: #cf0322">تغییر وضعیت های شما بیش از حد مجاز
+                        بوده است
                     </div>
-                    <span class="indicator-progress" style="text-align: center; z-index: 99; margin-top: 1em">
+                    <div class="d-block text-center fs-2x mb-3" style="color: #00b300">آخرین وضعیت شما: <b>حضور دارم</b>
+                    </div>
+                @elseif($check && $check->last() && $check->last()->present==1)
+                    <div class="d-block text-center fs-2x mb-3" style="color: #00b300">وضعیت شما: <b>حضور دارم</b></div>
+                    <div style="height: 300px">
+                        <div class="mmz wrap">
+                            <button class="button text-white" onclick="accept(0)">امروز حضور ندارم</button>
+                        </div>
+                        <span class="indicator-progress" style="text-align: center; z-index: 99; margin-top: 1em">
                     <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                    لطفا صبر کنید
-                </span>
+                        لطفا صبر کنید
+                    </span>
+                    </div>
+                @else
+                    <div style="height: 300px">
+                        <div class="d-block text-center fs-2x mb-3" style="color: #0033b3">وضعیت شما: <b>حضور ندارم</b>
+                        </div>
+                        <div class="mmz wrap">
+                            <button class="button text-white" onclick="accept(1)">امروز حضور دارم</button>
+                        </div>
+                        <span class="indicator-progress" style="text-align: center; z-index: 99; margin-top: 1em">
+                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        لطفا صبر کنید
+                    </span>
+                    </div>
+                @endif
+            @else
+                <div class="d-block text-center fs-3 mb-3" style="color: #cf5103">
+                    زمان تایید حضور به پایان رسیده است
                 </div>
             @endif
         </div>
     </div>
     <script>
-        accept = function () {
+        accept = function (inn) {
             $.ajaxSetup({'headers': {'X-CSRF-TOKEN': "{{csrf_token()}}"}});
-            let data = $("#add_account").serialize();
+            //let data = $("#add_account").serialize();
             $('.indicator-progress').show();
             $.ajax({
                 url: '/user/food',
                 type: 'POST',
-                data: 'data=' + data,
+                data: 'in=' + inn,
                 success: function (data) {
                     $('.indicator-progress').hide();
                     if (data == 'ok') {

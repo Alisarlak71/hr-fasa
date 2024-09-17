@@ -9,6 +9,7 @@ class food extends Model
     protected $table = 'user_food';
     protected $fillable = [
         'user_id',
+        'present'
     ];
     public function getUser(): \Illuminate\Database\Eloquent\Relations\HasOne
     {

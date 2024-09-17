@@ -15,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -99,12 +99,30 @@ class User extends Authenticatable
         return $this->is_admin;
     }
 
+    public function canDo($in)
+    {
+        if (auth()->user()->isAdmin() && permission::where(['user_id' => auth()->id(), 'perm' => $in])->first())
+            return true;
+        return "false";
+    }
+    public function canDoit($in,$id)
+    {
+        if (auth()->user()->isAdmin() && permission::where(['user_id' => $id, 'perm' => $in])->first())
+            return true;
+        return "false";
+    }
+
     public function photo(): MorphOne
     {
         return $this->morphOne(File::class, 'form');
     }
+
     public function getDocs()
     {
         return $this->hasMany(documents::class, 'user_id', 'id');
+    }
+    public function getPerm()
+    {
+        return $this->hasMany(permission::class, 'user_id', 'id');
     }
 }

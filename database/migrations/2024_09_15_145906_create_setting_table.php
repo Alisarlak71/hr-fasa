@@ -4,18 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
+    public $timestamps = false;
+
     public function up(): void
     {
-        Schema::create('user_food', function (Blueprint $table) {
+        Schema::create('setting', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->tinyInteger('present');
-            $table->timestamps();
+            $table->string('text');
+            $table->string('value');
         });
     }
 
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_food');
+        Schema::dropIfExists('setting');
     }
 };

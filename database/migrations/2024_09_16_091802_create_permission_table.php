@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_food', function (Blueprint $table) {
+        Schema::create('permission', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->tinyInteger('present');
+            $table->string('perm',50);
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_food');
+        Schema::dropIfExists('permission');
     }
 };

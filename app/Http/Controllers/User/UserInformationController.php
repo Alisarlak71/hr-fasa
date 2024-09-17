@@ -84,19 +84,22 @@ class UserInformationController extends Controller
 
     public function adShow(Request $request)
     {
-        $fil['filter'] = $request->filter;
-        $fil['lname'] = $request->lname;
-        ////dd($filters);
+        if (auth()->user()->canDo('userDocs')) {
+            $fil['filter'] = $request->filter;
+            $fil['lname'] = $request->lname;
+            ////dd($filters);
 
-        $uid = documents::groupBy('user_id')->pluck('user_id');
-        $accounts = auth()->user()->with('getDocs')->whereIn('id', $uid)
-            ->where('code', 'like', '%' . $fil['filter'] . '%')
-            ->where('lname', 'like', '%' . $fil['lname'] . '%')
-            ->paginate(10);
+            $uid = documents::groupBy('user_id')->pluck('user_id');
+            $accounts = auth()->user()->with('getDocs')->whereIn('id', $uid)
+                ->where('code', 'like', '%' . $fil['filter'] . '%')
+                ->where('lname', 'like', '%' . $fil['lname'] . '%')
+                ->paginate(10);
 
-        //$accounts = documents::paginate(10);
-        return view('dashboard.admin.usersDocs')->with(['title' => 'مدارک کاربران',
-            'userActs' => $accounts]);
+            //$accounts = documents::paginate(10);
+            return view('dashboard.admin.usersDocs')->with(['title' => 'مدارک کاربران',
+                'userActs' => $accounts]);
+        }
+        return redirect('/');
     }
 
     public function food()
@@ -111,6 +114,7 @@ class UserInformationController extends Controller
         if ($request->ajax() && auth()->id()) {
             food::create([
                 'user_id' => auth()->id(),
+                'present' => $request->in,
             ]);
             return 'ok';
         }

@@ -61,29 +61,35 @@
                         </div>
                         <!--end::Heading-->
                         <!--begin::Tab content-->
-                        <div class="container h-auto p-5" >
+                        <div class="container h-auto p-5">
                             <ul class="list-unstyled p-5" style="max-height: 500px; overflow: scroll">
                                 @foreach($card['items'] as $cardItem)
                                     <li class="mb-3 pb-3 border-bottom">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex align-items-center">
-                                                <img class="w-50px img-thumbnail" alt="card item" src="{{$cardItem->orderable->image->download_link ?? asset('assets/media/product/services.png')}}"/>
+                                                <img class="w-50px img-thumbnail" alt="card item"
+                                                     src="{{$cardItem->orderable->image->download_link ?? asset('assets/media/product/services.png')}}"/>
                                                 <div class="ml-4">
                                                     <p class="mb-1 text-gray-700">{{$cardItem->orderable->title}}</p>
-                                                    <p class="mb-0 text-primary">{{$cardItem->orderable->price * $cardItem->count}} ریال</p>
+                                                    <p class="mb-0 text-primary">{{$cardItem->orderable->price * $cardItem->count}}
+                                                        ریال</p>
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center">
-                                                <a class="btn btn-outline-danger btn-sm mr-2 kt_remove_from_card_request " data-id="{{$cardItem->orderable_id}}" data-type="{{($cardItem->orderable_type===\App\Models\Product::class?'product':'subscription')}}">-</a>
+                                                <a class="btn btn-outline-danger btn-sm mr-2 kt_remove_from_card_request "
+                                                   data-id="{{$cardItem->orderable_id}}"
+                                                   data-type="{{($cardItem->orderable_type===\App\Models\Product::class?'product':'subscription')}}">-</a>
                                                 <span class="mx-3">{{$cardItem->count}}</span>
-                                                <a class="btn btn-outline-success btn-sm kt_add_to_card_request" data-id="{{$cardItem->orderable_id}}" data-type="{{($cardItem->orderable_type===\App\Models\Product::class?'product':'subscription')}}">+</a>
+                                                <a class="btn btn-outline-success btn-sm kt_add_to_card_request"
+                                                   data-id="{{$cardItem->orderable_id}}"
+                                                   data-type="{{($cardItem->orderable_type===\App\Models\Product::class?'product':'subscription')}}">+</a>
                                             </div>
                                         </div>
                                     </li>
                                 @endforeach
                             </ul>
                             <div class="total mt-4 pt-3 border-top row">
-                                <h5><span class="text-muted">جمع کل :</span>  {{$card['total_price']}} ریال</h5>
+                                <h5><span class="text-muted">جمع کل :</span> {{$card['total_price']}} ریال</h5>
                                 <a class="btn btn-primary mt-3" id="submit_order">ثبت سفارش</a>
                             </div>
 
@@ -94,13 +100,12 @@
                     <!--end::Menu wrapper-->
                 </div>
                 <!--end::اعلان ها-->
-                @if(Auth::user()->is_admin)
+                @if(Auth::user()->is_admin && (Auth::user()->canDo('userList') || Auth::user()->canDo('userAccount') || Auth::user()->canDo('userDocs') || Auth::user()->canDo('userPresent')))
                     <div class="app-navbar-item ms-1 ms-md-4">
                         <a href="/admin/users" class="btn btn-sm btn-light btn-primary">
                             بخش مدیریت</a>
                     </div>
                 @endif
-
 
                 <!--begin::کاربر menu-->
                 <div class="app-navbar-item ms-1 ms-md-4" id="kt_header_user_menu_toggle">

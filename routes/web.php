@@ -98,7 +98,7 @@ Route::prefix('/admin')->middleware(AdminAuthMiddleware::class)->group(function 
         Route::get('/account_number', [\App\Http\Controllers\User\accountNumber::class, 'accountNumber']);
         Route::post('/account_number/doEdit', [\App\Http\Controllers\User\accountNumber::class, 'changeDoEdit']);
         Route::get('/documents', [\App\Http\Controllers\User\UserInformationController::class, 'adShow']);
-        Route::get('/food', [AdminUserController::class, 'foodPerson']);
+        Route::get('/food', [AdminUserController::class, 'foodPerson'])->name('admin.users.food');
         Route::get('account_number/export', [\App\Http\Controllers\User\accountNumber::class, 'fileExport']);
         Route::get('foods/export', [\App\Http\Controllers\User\accountNumber::class, 'fileExport2']);
         Route::put('/{user}', [AdminUserController::class, 'update']);

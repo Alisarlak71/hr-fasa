@@ -83,52 +83,58 @@
                         </div>
                         <!--end:Menu content-->
                         <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link " href="/admin/users">
+                        @if(auth()->user()->canDo('userList')!=="false")
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link " href="/admin/users">
 												<span class="menu-icon">
 													<i class="ki-duotone ki-user fs-2">
 														<span class="path1"></span>
 														<span class="path2"></span>
 													</i>
 												</span>
-                                <span class="menu-title"> کاربران</span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
+                                    <span class="menu-title"> کاربران</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                        @endif
                         <!--end:Menu item-->
                         <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link " href="/admin/users/account_number">
+                        @if(auth()->user()->canDo('userAccount')!=="false")
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link " href="/admin/users/account_number">
                                     <span class="menu-icon">
                                         <i class="ki-duotone ki-user fs-2">
                                             <span class="path1"></span>
                                             <span class="path2"></span>
                                         </i>
                                     </span>
-                                <span class="menu-title"> شماره حساب‌ها </span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
+                                    <span class="menu-title"> شماره حساب‌ها </span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                        @endif
                         <!--end:Menu item-->
                         <!--begin:Menu item-->
-                        <div class="menu-item">
-                            <!--begin:Menu link-->
-                            <a class="menu-link " href="/admin/users/documents">
+                        @if(auth()->user()->canDo('userDocs')!=="false")
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+                                <a class="menu-link " href="/admin/users/documents">
                                     <span class="menu-icon">
                                         <i class="ki-duotone ki-user fs-2">
                                             <span class="path1"></span>
                                             <span class="path2"></span>
                                         </i>
                                     </span>
-                                <span class="menu-title"> مدارک </span>
-                            </a>
-                            <!--end:Menu link-->
-                        </div>
+                                    <span class="menu-title"> مدارک </span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                        @endif
                         <!--end:Menu item-->
                         <!--begin:Menu item-->
-                        @if(auth()->user()->place == 'دفتر مرکزی')
+                        @if(auth()->user()->place == 'دفتر مرکزی' && auth()->user()->canDo('userPresent')!=="false")
                             <div class="menu-item">
                                 <!--begin:Menu link-->
                                 <a class="menu-link " href="/admin/users/food">
